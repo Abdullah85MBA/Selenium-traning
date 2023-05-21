@@ -74,59 +74,112 @@ async function getElements(driver, tagName) {
         return [];
       }
     }
+
+    async function waitForTextToAppear(driver, text) {
+      await driver.wait(async function () {
+        const element = await driver.findElement(By.tagName('body'));
+        const bodyText = await element.getText();
+        return bodyText.includes(text);
+      });
+    }
+
     async function Bookcourt(driver) {
       
-      const calender = await driver.wait(until.elementLocated(By.xpath('/html/body/div[5]/div[4]/div/div/div/form/div/div/div[1]/div/div[1]/button')),
-      10000
-      );
-      await driver.wait(until.elementIsVisible(calender), 10000);
-      //await driver.manage().window().maximize();
-      await calender.click();
-      await driver.manage().window().maximize();
-
-      // Saturday 
-      const saturday = await driver.findElement(By.xpath('/html/body/div[7]/table/tbody/tr[2]/td[6]/a'));
-      await saturday.click();
-      await driver.manage().window().maximize();
-// court 6
-
-
-let freeCourt;
-const grandparent = await driver.findElement(By.xpath('/html/body/div[5]/div[4]/div/div/div/form/div/div/div[2]/div[2]/ul/li[6]/div/div/div[2]'));
-await driver.manage().window().maximize();
-const parentElements = await grandparent.findElements(By.tagName('div'));
-for (const div of parentElements) {
-  const dataAvailabilityAttributeValue = await div.getAttribute('data-availability');
-
-  if (dataAvailabilityAttributeValue.includes('true')) {
-    const childElements = await div.findElements(By.tagName('div'));
-    for (const div of childElements) {
-      const startTimeValue = await div.getAttribute('data-system-start-time');
-
-      if (startTimeValue.includes('420')) {
-
-        // const aElement = await div.findElement(By.tagName('a'));
-
-        // await driver.wait(until.elementToBeClickable(aElement), 5000); // wait for the element to be clickable
-        // // await aElement.click();
-        freeCourt = div;
-        const location = await div.getLocation();
-        const x = location.x;
-        const y = location.y;
-
-const actions = driver.actions({ bridge: true });
-await actions.move({ origin: freeCourt }).perform();
-
-        // await driver.wait(until.elementToBeClickable(freeCourt), 5000); // wait for the element to be clickable
-        await freeCourt.click();
-        break;
+      
+      async function performActionAfterTextAppears(driver) {
+        const textToWaitFor = "Abdullah Allabwani";
+      
+        await waitForTextToAppear(driver, textToWaitFor);
+        // Next function or actions after the text appears on the screen
+        const currentDate = new Date(); // Get the current date
+        const nextSunday = getNextSunday(currentDate); // Get the next Sunday
+        const formattedDate = formatDate(nextSunday); // Format the date as "YYYY-MM-DD"
+      
+        const url = `https://clubspark.lta.org.uk/ParliamentHillFieldsTennisCourts/Booking/BookByDate#?date=${formattedDate}&role=member`;
+        await driver.get(url);
+      
+        console.log("amazing");
       }
-    }
-  }
-}
-}
+      
+      // Function to get the next Sunday
+      function getNextSunday(date) {
+        const dayOfWeek = date.getDay(); // Get the current day of the week (0 = Sunday, 1 = Monday, ...)
+      
+        // Calculate the number of days until the next Sunday (7 - dayOfWeek)
+        // Add 1 to skip the current day and find the next Sunday
+        const daysUntilNextSunday = 7 - dayOfWeek + 1;
+      
+        // Create a new Date object by adding the calculated number of days
+        const nextSunday = new Date(date.getTime() + daysUntilNextSunday * 24 * 60 * 60 * 1000);
+      
+        return nextSunday;
+      }
+     
 
-   
+      // Function to format the date as "YYYY-MM-DD"
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+      await performActionAfterTextAppears(driver)
+    }
+    // https://clubspark.lta.org.uk/ParliamentHillFieldsTennisCourts/Booking/BookByDate#?date=2023-05-28&role=member
+
+//     async function Bookcourt(driver) {
+      
+//       const calender = await driver.wait(until.elementLocated(By.xpath('/html/body/div[5]/div[4]/div/div/div/form/div/div/div[1]/div/div[1]/button')),
+//       10000
+//       );
+//       await driver.wait(until.elementIsVisible(calender), 10000);
+//       //await driver.manage().window().maximize();
+//       await calender.click();
+//       await driver.manage().window().maximize();
+
+//       // Saturday 
+//       const saturday = await driver.findElement(By.xpath('/html/body/div[7]/table/tbody/tr[2]/td[6]/a'));
+//       await saturday.click();
+//       await driver.manage().window().maximize();
+// // court 6
+
+
+// let freeCourt;
+// const grandparent = await driver.findElement(By.xpath('/html/body/div[5]/div[4]/div/div/div/form/div/div/div[2]/div[2]/ul/li[6]/div/div/div[2]'));
+// await driver.manage().window().maximize();
+// const parentElements = await grandparent.findElements(By.tagName('div'));
+// for (const div of parentElements) {
+//   const dataAvailabilityAttributeValue = await div.getAttribute('data-availability');
+
+//   if (dataAvailabilityAttributeValue.includes('true')) {
+//     const childElements = await div.findElements(By.tagName('div'));
+//     for (const div of childElements) {
+//       const startTimeValue = await div.getAttribute('data-system-start-time');
+
+//       if (startTimeValue.includes('420')) {
+
+//         // const aElement = await div.findElement(By.tagName('a'));
+
+//         // await driver.wait(until.elementToBeClickable(aElement), 5000); // wait for the element to be clickable
+//         // // await aElement.click();
+//         freeCourt = div;
+//         const location = await div.getLocation();
+//         const x = location.x;
+//         const y = location.y;
+
+// const actions = driver.actions({ bridge: true });
+// await actions.move({ origin: freeCourt }).perform();
+
+//         // await driver.wait(until.elementToBeClickable(freeCourt), 5000); // wait for the element to be clickable
+//         await freeCourt.click();
+//         break;
+//       }
+//     }
+//   }
+// }
+// }
+
+
 
 automator(credentials);
 
