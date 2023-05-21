@@ -4,6 +4,8 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+
         {
             "type": "node",
             "request": "launch",
@@ -12,6 +14,26 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/LinkedinTraning.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program USA",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/AfterUSA.js"
+        },
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program Hampstead",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/hampsteadHeathCourts.js"
         }
+
     ]
 }

@@ -9,11 +9,11 @@ await driver.get("https://camdenactive.camden.gov.uk/security/login.aspx?fdRetur
     // Full Screen
     await driver.manage().window().fullscreen();
 
-Login(driver, credentials);
+await Login(driver, credentials);
 
-bookbutton(driver);
-Tennisclick (driver);
-court1 (driver);
+await bookbutton(driver);
+await Tennisclick (driver);
+await court1 (driver);
 }
 
 async function Login(driver, credentials) {
@@ -45,18 +45,18 @@ async function Login(driver, credentials) {
 
 async function bookbutton (driver){
   let element = await getElement(driver, `.//a[@class="main-menu-item main-menu-item-motivated"]`);
-    element.click();
+    await element.click();
     await driver.manage().window().fullscreen();
 }
     async function Tennisclick (driver){
         let element2 = await getElement(driver, `.//a[@id="ctl00_PageContent_repCourseCategories_ctl09_btnViewCourses"]`);
-          element2.click();
+          await element2.click();
 
  }
 
   async function court1 (driver){
     let element3 = await getElement(driver, `.//a[@id="ctl00_PageContent_repCourses_ctl01_txtCategoryName"]`);
-      element3.click();
+      await element3.click();
 
 }
   
